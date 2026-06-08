@@ -61,23 +61,25 @@ Uses TF-IDF Vectorization
 **Final Score = 40% Keyword Matching + 60% Semantic Similarity****
 
 **Project Structure**
-appln.py – Flask web application and user interface integration
-run_pipeline.py – Main evaluation pipeline execution
-preprocessing.py – Image preprocessing and enhancement
-ocr_module.py – Handwritten text extraction using EasyOCR
-answer_segmentation.py – Question and answer segmentation
-postprocessing.py – NLP-based text cleaning and preprocessing
-keyword_scores.py – Keyword matching evaluation
-similarity_scores.py – Semantic similarity scoring using TF-IDF and Cosine Similarity
-hybrid_scores.py – Hybrid scoring and feedback generation
-templates/index.html – Frontend user interface
-images/input – Uploaded handwritten answer scripts
-images/output – Preprocessed images
-model_answers – Reference/model answers
-ocr_output_txtdoc – OCR extracted text files
-segmented_answers – Segmented question-answer files
-post_processed_text – NLP processed student answers
-final_report – Generated PDF and Excel evaluation reports
+
+•	appln.py – Flask web application and user interface integration
+•	run_pipeline.py – Main evaluation pipeline execution
+•	preprocessing.py – Image preprocessing and enhancement
+•	ocr_module.py – Handwritten text extraction using EasyOCR
+•	answer_segmentation.py – Question and answer segmentation
+•	postprocessing.py – NLP-based text cleaning and preprocessing
+•	keyword_scores.py – Keyword matching evaluation
+•	similarity_scores.py – Semantic similarity scoring using TF-IDF and Cosine Similarity
+•	hybrid_scores.py – Hybrid scoring and feedback generation
+•	templates/index.html – Frontend user interface
+•	images/input – Uploaded handwritten answer scripts
+•	images/output – Preprocessed images
+•	model_answers – Reference/model answers
+•	ocr_output_txtdoc – OCR extracted text files
+•	segmented_answers – Segmented question-answer files
+•	post_processed_text – NLP processed student answers
+•	final_report – Generated PDF and Excel evaluation reports
+
 
 **Output**
 
