@@ -61,30 +61,23 @@ Uses TF-IDF Vectorization
 **Final Score = 40% Keyword Matching + 60% Semantic Similarity****
 
 **Project Structure**
-
-📂 Handwritten_Answer_Evaluation
- ┣ 📜 appln.py
- ┣ 📜 run_pipeline.py
- ┣ 📜 preprocessing.py
- ┣ 📜 ocr_module.py
- ┣ 📜 answer_segmentation.py
- ┣ 📜 postprocessing.py
- ┣ 📜 keyword_scores.py
- ┣ 📜 similarity_scores.py
- ┣ 📜 hybrid_scores.py
- ┣ 📂 templates
- ┃ ┗ 📜 index.html
- ┣ 📂 images
- ┃ ┣ 📂 input
- ┃ ┗ 📂 output
- ┣ 📂 model_answers
- ┃ ┗ 📜 model_answers.txt
- ┣ 📂 segmented_answers
- ┣ 📂 post_processed_text
- ┣ 📂 final_report
- ┃ ┣ 📜 Final_Report.pdf
- ┃ ┗ 📜 Final_Report.xlsx
- ┗ 📜 requirements.txt
+appln.py – Flask web application and user interface integration
+run_pipeline.py – Main evaluation pipeline execution
+preprocessing.py – Image preprocessing and enhancement
+ocr_module.py – Handwritten text extraction using EasyOCR
+answer_segmentation.py – Question and answer segmentation
+postprocessing.py – NLP-based text cleaning and preprocessing
+keyword_scores.py – Keyword matching evaluation
+similarity_scores.py – Semantic similarity scoring using TF-IDF and Cosine Similarity
+hybrid_scores.py – Hybrid scoring and feedback generation
+templates/index.html – Frontend user interface
+images/input – Uploaded handwritten answer scripts
+images/output – Preprocessed images
+model_answers – Reference/model answers
+ocr_output_txtdoc – OCR extracted text files
+segmented_answers – Segmented question-answer files
+post_processed_text – NLP processed student answers
+final_report – Generated PDF and Excel evaluation reports
 
 **Output**
 
