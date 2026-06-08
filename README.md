@@ -25,9 +25,9 @@ The Handwritten Answer Script Evaluation System is an AI-powered application des
 •	Report Generation
 
 
-**Technologies Used
-**
-Frontend**
+**Technologies Used**
+
+**Frontend**
 •	HTML
 •	CSS
 
