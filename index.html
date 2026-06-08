@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Handwritten Answer Evaluation</title>
+
+    <style>
+      body {
+        font-family: Arial;
+        background: linear-gradient(to right, #4e73df, #1cc88a);
+        text-align: center;
+        color: white;
+        padding-top: 60px;
+      }
+
+      .card {
+        background: white;
+        color: black;
+        width: 650px;
+        margin: auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      h2 {
+        margin-bottom: 20px;
+      }
+
+      input[type="file"] {
+        margin-top: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 5px;
+        background: #4e73df;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      button:hover {
+        background: #2e59d9;
+      }
+
+      button:disabled {
+        background: grey;
+        cursor: not-allowed;
+      }
+
+      .success {
+        color: green;
+        font-weight: bold;
+      }
+
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+
+      #progressContainer {
+        display: none;
+        margin-top: 20px;
+      }
+
+      .progress-bar {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 20px;
+        overflow: hidden;
+        height: 25px;
+        margin-top: 10px;
+      }
+
+      .progress {
+        height: 100%;
+        width: 0%;
+        background-color: #4e73df;
+        text-align: center;
+        line-height: 25px;
+        color: white;
+        transition: width 0.4s ease;
+      }
+
+      #downloadSection {
+        display: none;
+        margin-top: 25px;
+      }
+
+      #statusText {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h2>Handwritten Answer Evaluation System</h2>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% for
+      category, message in messages %}
+      <p class="{{category}}">{{message}}</p>
+      {% endfor %} {% endwith %}
+
+      <!-- Upload Form -->
+      <form action="/upload" method="POST" enctype="multipart/form-data">
+        <h4>Upload Student Answer Sheets</h4>
+        <input type="file" name="student_files" multiple required />
+
+        <br /><br />
+
+        <h4>Upload Model Answer File (.txt)</h4>
+        <input type="file" name="model_file" accept=".txt" required />
+
+        <br /><br />
+
+        <button type="submit">Upload Files</button>
+      </form>
+
+      <!-- Evaluate Button -->
+      <button id="evaluateBtn" onclick="startEvaluation()">Evaluate</button>
+
+      <!-- Progress Section -->
+      <div id="progressContainer">
+        <p id="statusText">Waiting to start...</p>
+        <div class="progress-bar">
+          <div class="progress" id="progressBar">0%</div>
+        </div>
+      </div>
+
+      <!-- Download Section -->
+      <div id="downloadSection">
+        <h3 id="finalMessage">✅ Evaluation Completed!</h3>
+        <button onclick="downloadPDF()">Download PDF</button>
+        <button onclick="downloadExcel()">Download Excel</button>
+      </div>
+    </div>
+
+    <script>
+      function startEvaluation() {
+        document.getElementById("progressContainer").style.display = "block";
+        document.getElementById("downloadSection").style.display = "none";
+
+        const progressBar = document.getElementById("progressBar");
+        const statusText = document.getElementById("statusText");
+        const evaluateBtn = document.getElementById("evaluateBtn");
+        const finalMessage = document.getElementById("finalMessage");
+
+        evaluateBtn.disabled = true;
+
+        let elapsed = 0;
+        const totalTime = 540;
+
+        const preprocessingTime = 120;
+        const ocrTime = 300;
+
+        const interval = setInterval(() => {
+          elapsed++;
+
+          // 🔥 Improved status messages
+          if (elapsed <= preprocessingTime) {
+            statusText.innerText = "📷 Preprocessing images...";
+          } else if (elapsed <= preprocessingTime + ocrTime) {
+            statusText.innerText = "🔍 Extracting text using OCR...";
+          } else {
+            statusText.innerText =
+              "🧠 Evaluating answers & generating report...";
+          }
+
+          let progress = Math.min((elapsed / totalTime) * 100, 98);
+          progressBar.style.width = progress.toFixed(0) + "%";
+          progressBar.innerText = progress.toFixed(0) + "%";
+        }, 1000);
+
+        fetch("/evaluate", { method: "POST" })
+          .then((res) => res.json())
+          .then((data) => {
+            clearInterval(interval);
+
+            if (data.status === "done") {
+              progressBar.style.width = "100%";
+              progressBar.innerText = "100%";
+              statusText.innerText = "✅ Evaluation Completed Successfully!";
+              finalMessage.innerText = data.message || "Evaluation Completed!";
+              document.getElementById("downloadSection").style.display =
+                "block";
+            } else {
+              statusText.innerText = "❌ Error: " + data.message;
+            }
+
+            evaluateBtn.disabled = false;
+          })
+          .catch(() => {
+            clearInterval(interval);
+            statusText.innerText = "❌ Server Error!";
+            evaluateBtn.disabled = false;
+          });
+      }
+
+      function downloadPDF() {
+        window.location.href = "/download/pdf";
+      }
+
+      function downloadExcel() {
+        window.location.href = "/download/excel";
+      }
+
+      // Reset system on page refresh
+      window.addEventListener("load", function () {
+        if (performance.navigation.type === 1) {
+          fetch("/reset", { method: "POST" });
+        }
+      });
+    </script>
+  </body>
+</html>
